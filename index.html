@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Устинов Мебель — ЦА и маркетинг · интерактивный отчёт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06080d; --bg-2:#0a0d15; --panel:#0f131d; --panel-2:#141a27; --panel-3:#1a2230;
+  --line:#1c2433; --line-2:#2a3447; --glass:rgba(20,26,39,.6);
+  --txt:#eaf0fa; --txt-2:#94a2bb; --txt-3:#5a6880;
+  --lime:#c2f24a; --lime-ink:#0b0f08;
+  --mint:#00e5a0; --violet:#8b5cff; --blue:#3d7dff; --cyan:#22d3ee; --amber:#ffb020;
+  --up:#26d07c; --down:#ff5a6e; --up-soft:rgba(38,208,124,.14); --down-soft:rgba(255,90,110,.14);
+  --grad-balance:radial-gradient(120% 140% at 0% 0%,#1b2a22 0%,#0f131d 42%),linear-gradient(135deg,rgba(194,242,74,.16),rgba(139,92,255,.14));
+  --grad-lime:linear-gradient(135deg,#d6ff5c,#9fe000);
+  --grad-violet:linear-gradient(135deg,#a07bff,#6d3bff);
+  --grad-text:linear-gradient(100deg,#eaf0fa 0%,#c2f24a 55%,#8b5cff 100%);
+  --glow-lime:0 0 0 1px rgba(194,242,74,.4),0 8px 30px rgba(194,242,74,.22);
+  --elev-1:0 1px 0 rgba(255,255,255,.03) inset,0 6px 18px rgba(0,0,0,.5);
+  --elev-2:0 1px 0 rgba(255,255,255,.04) inset,0 16px 44px rgba(0,0,0,.6);
+  --r:14px; --r-sm:10px; --r-xs:7px; --maxw:1080px;
+  --ease:cubic-bezier(.22,1,.36,1); --ease-out:cubic-bezier(.16,1,.3,1);
+}
+[data-theme="light"]{
+  --bg:#f4f6fb; --bg-2:#eef1f8; --panel:#ffffff; --panel-2:#f7f9fd; --panel-3:#eef2f8;
+  --line:#e4e9f2; --line-2:#d2dae8; --glass:rgba(255,255,255,.7);
+  --txt:#0b1220; --txt-2:#48566e; --txt-3:#8493ab;
+  --lime:#5fb000; --lime-ink:#ffffff; --mint:#00a877; --violet:#6d3bff; --blue:#2563eb; --cyan:#0891b2; --amber:#b8730a;
+  --up:#0c9d63; --down:#e23048; --up-soft:rgba(12,157,99,.12); --down-soft:rgba(226,48,72,.12);
+  --grad-balance:radial-gradient(120% 140% at 0% 0%,#eaffd0 0%,#ffffff 46%),linear-gradient(135deg,rgba(95,176,0,.12),rgba(109,59,255,.10));
+  --grad-text:linear-gradient(100deg,#0b1220 0%,#5fb000 55%,#6d3bff 100%);
+  --glow-lime:0 0 0 1px rgba(95,176,0,.35),0 10px 30px rgba(95,176,0,.18);
+  --elev-1:0 2px 10px rgba(15,23,42,.07); --elev-2:0 16px 40px rgba(15,23,42,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);line-height:1.55;overflow-x:hidden;
+  transition:background .5s var(--ease),color .5s var(--ease);-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(var(--line) .6px,transparent .6px);background-size:26px 26px;opacity:.5;
+  -webkit-mask:radial-gradient(ellipse 70% 55% at 50% 0%,#000,transparent 80%);mask:radial-gradient(ellipse 70% 55% at 50% 0%,#000,transparent 80%)}
+.num{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:6px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--lime)}
+
+/* TICKER */
+.ticker{position:relative;z-index:5;border-bottom:1px solid var(--line);background:var(--bg-2);overflow:hidden;height:34px}
+.ticker-track{display:flex;gap:34px;align-items:center;height:100%;white-space:nowrap;width:max-content;animation:scroll 44s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes scroll{to{transform:translateX(-50%)}}
+.tick{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt-2)}
+.tick b{color:var(--txt);font-weight:600}
+.tick .up{color:var(--up)} .tick .lm{color:var(--lime)}
+.tick-dot{width:5px;height:5px;border-radius:50%;background:var(--line-2)}
+
+.bar-prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:200;background:var(--grad-lime);box-shadow:0 0 10px rgba(194,242,74,.6)}
+.to-top{position:fixed;right:20px;bottom:20px;z-index:200;width:44px;height:44px;border:1px solid var(--line-2);border-radius:12px;
+  background:var(--panel);color:var(--lime);cursor:pointer;font-size:18px;font-weight:700;box-shadow:var(--elev-1);
+  opacity:0;transform:translateY(14px);transition:all .4s var(--ease)}
+.to-top.show{opacity:1;transform:none}.to-top:hover{border-color:var(--lime);box-shadow:var(--glow-lime)}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px) saturate(150%);border-bottom:1px solid var(--line)}
+.hdr-in{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--grad-lime);color:var(--lime-ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;box-shadow:var(--glow-lime)}
+.brand b{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:.04em}
+.brand span{display:block;font-size:10px;color:var(--txt-3);font-family:'JetBrains Mono',monospace;letter-spacing:.1em}
+.hdr-sp{flex:1}
+.status{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-2);padding:5px 11px;border:1px solid var(--line);border-radius:20px;background:var(--panel)}
+.status .led{width:7px;height:7px;border-radius:50%;background:var(--up);box-shadow:0 0 8px var(--up);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tgl{width:54px;height:28px;border-radius:16px;border:1px solid var(--line-2);background:var(--panel-2);position:relative;cursor:pointer;flex-shrink:0}
+.tgl-k{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--panel);box-shadow:var(--elev-1);display:flex;align-items:center;justify-content:center;font-size:12px;transition:transform .4s var(--ease)}
+[data-theme="light"] .tgl-k{transform:translateX(26px)}
+@media(max-width:560px){.status{display:none}}
+
+/* HERO */
+.hero{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:54px 24px 26px;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:36px;align-items:center}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);padding:6px 13px;border:1px solid var(--line-2);border-radius:20px;background:var(--panel);margin-bottom:18px}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(30px,5vw,50px);font-weight:700;line-height:1.05;letter-spacing:-.02em;
+  background:var(--grad-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
+.hero p{font-size:15px;color:var(--txt-2);max-width:490px;margin-bottom:24px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.bal{position:relative;border:1px solid var(--line-2);border-radius:18px;padding:22px;background:var(--grad-balance);overflow:hidden;box-shadow:var(--elev-2)}
+.bal::after{content:'';position:absolute;inset:0;background:radial-gradient(80% 60% at 100% 0%,rgba(139,92,255,.12),transparent 60%);pointer-events:none}
+.bal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.bal-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-2);letter-spacing:.08em;text-transform:uppercase}
+.bal-chip{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--up);background:var(--up-soft);border:1px solid color-mix(in srgb,var(--up) 35%,transparent);padding:2px 8px;border-radius:8px}
+.bal-amt{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:2px 0 4px}
+.bal-amt .cur{color:var(--txt-3);font-size:18px}
+.bal-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-3);margin-bottom:14px}
+.spark{width:100%;height:54px;display:block}
+.bal-foot{display:flex;justify-content:space-between;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-3)}
+
+/* NAV */
+.navbar{position:sticky;top:63px;z-index:90;background:var(--glass);backdrop-filter:blur(14px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:14px}
+.navbar-in{max-width:var(--maxw);margin:0 auto;padding:9px 24px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navbar-in::-webkit-scrollbar{display:none}
+.seg{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt-2);
+  padding:7px 13px;border-radius:9px;border:1px solid transparent;text-decoration:none;transition:all .2s var(--ease);cursor:pointer}
+.seg:hover{color:var(--txt);background:var(--panel-2)}
+.seg.active{color:var(--lime);background:var(--panel);border-color:var(--line-2)}
+.seg .ix{color:var(--txt-3);font-size:11px}
+
+/* SHELL */
+.wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:30px 24px 70px;display:flex;flex-direction:column;gap:22px}
+
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--elev-1);
+  opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease);scroll-margin-top:120px}
+.sec.in{opacity:1;transform:none}
+.sec-h{display:flex;align-items:center;gap:13px;padding:18px 22px;border-bottom:1px solid var(--line);background:var(--panel-2)}
+.sec-ix{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:1px solid var(--line-2);background:var(--panel-3)}
+.sec-h .ix-n{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-3);letter-spacing:.1em}
+.sec-h .ix-t{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;letter-spacing:-.01em}
+.sec-b{padding:22px}
+.lead{font-size:14px;color:var(--txt-2);margin-bottom:18px;max-width:760px}
+.lead strong{color:var(--txt)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--txt-3);margin:26px 0 14px;display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:'';flex:1;height:1px;background:var(--line)}
+.eyebrow:first-child{margin-top:0}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mint)}
+p.body{font-size:14px;color:var(--txt-2);margin-bottom:12px}
+p.body strong,li strong{color:var(--txt)}
+.hl{color:var(--lime);font-weight:600}
+.hlv{color:var(--violet);font-weight:600}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px}
+.kpi{position:relative;border:1px solid var(--line);border-radius:13px;padding:17px;background:var(--panel-2);overflow:hidden;transition:transform .3s var(--ease),border-color .3s}
+.kpi:hover{transform:translateY(-4px);border-color:var(--line-2)}
+.kpi .lab{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-3);letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px}
+.kpi .val{font-family:'JetBrains Mono',monospace;font-size:23px;font-weight:700;letter-spacing:-.02em}
+.kpi .val .cur{color:var(--txt-3);font-size:15px}
+.kpi .dl{display:inline-flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:9px;color:var(--txt-2)}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-sm);margin:6px 0}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-3);background:var(--panel-2);padding:11px 15px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:12px 15px;color:var(--txt-2);border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr{transition:background .15s}.tbl tbody tr:hover{background:var(--panel-2)}
+.tbl td:first-child{color:var(--txt);font-weight:500}
+.tbl .w{font-family:'JetBrains Mono',monospace;color:var(--lime);font-weight:700}
+
+/* STATUS PILL */
+.st{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;padding:4px 10px;border-radius:7px;border:1px solid}
+.st::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.st.ok{color:var(--up);background:var(--up-soft);border-color:color-mix(in srgb,var(--up) 30%,transparent)}
+.st.pend{color:var(--amber);background:color-mix(in srgb,var(--amber) 14%,transparent);border-color:color-mix(in srgb,var(--amber) 30%,transparent)}
+.st.fail{color:var(--down);background:var(--down-soft);border-color:color-mix(in srgb,var(--down) 30%,transparent)}
+.st.auth{color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,transparent);border-color:color-mix(in srgb,var(--blue) 30%,transparent)}
+.st.hold{color:var(--violet);background:color-mix(in srgb,var(--violet) 14%,transparent);border-color:color-mix(in srgb,var(--violet) 30%,transparent)}
+
+/* SEGMENT CARDS */
+.seg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.scard{border:1px solid var(--line);border-radius:14px;background:var(--panel-2);overflow:hidden;transition:transform .3s var(--ease),border-color .3s;display:flex;flex-direction:column}
+.scard:hover{transform:translateY(-4px);border-color:var(--line-2)}
+.scard.prio{border-color:color-mix(in srgb,var(--lime) 45%,transparent);box-shadow:var(--glow-lime)}
+.scard-h{display:flex;align-items:center;gap:11px;padding:15px 16px;border-bottom:1px solid var(--line)}
+.scard-ic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--panel-3);border:1px solid var(--line-2);flex-shrink:0}
+.scard-h .no{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt-3);letter-spacing:.08em}
+.scard-h .nm{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;line-height:1.2}
+.scard-b{padding:14px 16px;display:flex;flex-direction:column;gap:11px;flex:1}
+.attr{}
+.attr .k{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--txt-3);margin-bottom:4px}
+.attr .v{font-size:12.5px;color:var(--txt-2);line-height:1.5}
+.dot{width:7px;height:7px;border-radius:2px;display:inline-block}
+.dot.pain{background:var(--down)}.dot.fear{background:var(--amber)}.dot.want{background:var(--up)}.dot.obj{background:var(--violet)}
+.prio-badge{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--lime-ink);background:var(--grad-lime);padding:2px 8px;border-radius:6px;margin-left:auto}
+
+/* LIST */
+ul.clean{list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.clean li{position:relative;padding-left:22px;font-size:14px;color:var(--txt-2);line-height:1.5}
+ul.clean li::before{content:'▸';position:absolute;left:0;top:0;color:var(--lime);font-size:12px}
+ul.clean.v li::before{color:var(--violet)}
+
+/* CJM TIMELINE */
+.cjm{display:flex;flex-direction:column;gap:0}
+.cstep{display:grid;grid-template-columns:52px minmax(0,1fr);gap:16px}
+.crail{display:flex;flex-direction:column;align-items:center}
+.cnode{width:40px;height:40px;border-radius:11px;background:var(--panel-3);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;color:var(--lime);flex-shrink:0;z-index:2}
+.cline{flex:1;width:2px;background:linear-gradient(var(--line-2),var(--line));margin:4px 0;min-height:20px}
+.cstep:last-child .cline{display:none}
+.cbody{padding-bottom:22px;min-width:0}
+.cbody .ct{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-bottom:4px}
+.cbody .cph{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--txt-3);margin-bottom:12px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.cq{border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:var(--panel-2)}
+.cq .cl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--txt-3);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.cq .cv{font-size:12.5px;color:var(--txt-2);line-height:1.5}
+.cq.mk{border-color:color-mix(in srgb,var(--lime) 35%,transparent)}
+.cq.mk .cl{color:var(--lime)}
+
+/* QUOTE CHIPS */
+.quotes{display:flex;flex-wrap:wrap;gap:9px}
+.quote{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt-2);border:1px solid var(--line-2);border-radius:9px;padding:8px 12px;background:var(--bg-2)}
+.quote::before{content:'“';color:var(--lime);margin-right:2px}
+.quote::after{content:'”';color:var(--lime);margin-left:1px}
+.phrase{border-left:2px solid var(--lime);padding:9px 14px;background:var(--panel-2);border-radius:0 9px 9px 0;font-size:13.5px;color:var(--txt);margin-bottom:8px;font-style:italic}
+
+/* PRINCIPLES */
+.princ{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px}
+.pcard{border:1px solid var(--line);border-radius:13px;padding:18px;background:var(--panel-2);transition:transform .3s var(--ease),border-color .3s}
+.pcard:hover{transform:translateY(-4px);border-color:var(--lime)}
+.pcard .pi{font-size:22px;margin-bottom:9px}
+.pcard b{display:block;font-family:'Space Grotesk',sans-serif;font-size:14px;margin-bottom:6px}
+.pcard p{font-size:13px;color:var(--txt-2);line-height:1.55}
+
+/* HYPOTHESES */
+.hyp{border:1px solid var(--line);border-radius:12px;background:var(--panel-2);margin-bottom:10px;overflow:hidden}
+.hyp-h{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer;transition:background .2s}
+.hyp-h:hover{background:var(--panel-3)}
+.hyp-id{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--lime-ink);background:var(--grad-lime);width:34px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hyp-t{font-size:13.5px;color:var(--txt);flex:1;line-height:1.4}
+.hyp-ar{color:var(--txt-3);font-size:13px;transition:transform .3s var(--ease);flex-shrink:0}
+.hyp.open .hyp-ar{transform:rotate(90deg)}
+.hyp-b{max-height:0;overflow:hidden;transition:max-height .35s var(--ease)}
+.hyp-b-in{padding:0 15px 14px 61px;font-size:13px;color:var(--txt-2);line-height:1.6}
+.hyp-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mint);border:1px solid var(--line-2);border-radius:6px;padding:2px 7px;margin-top:8px}
+.hgroup{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-3);margin:20px 0 12px}
+
+/* CALLOUT */
+.callout{display:flex;gap:13px;border:1px solid var(--line-2);border-left:3px solid var(--lime);border-radius:11px;padding:16px 18px;background:var(--panel-2);margin:6px 0}
+.callout.vio{border-left-color:var(--violet)}
+.callout .ci{font-size:20px;flex-shrink:0}
+.callout .cc{font-size:13.5px;color:var(--txt-2);line-height:1.6}
+.callout .cc b{color:var(--txt)}
+
+/* FINAL */
+.final-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:6px}
+.fcard{border:1px solid var(--line-2);border-radius:14px;padding:20px;background:var(--grad-balance);position:relative;overflow:hidden}
+.fcard .fn{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--lime);line-height:1;margin-bottom:12px}
+.fcard .ft{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;margin-bottom:7px}
+.fcard .fp{font-size:12.5px;color:var(--txt-2);line-height:1.55}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-2);border:1px solid var(--line-2);border-radius:20px;padding:5px 11px;background:var(--panel-2)}
+.tag .i{color:var(--cyan);margin-right:5px}
+
+/* FOOTER */
+.footer{position:relative;z-index:1;border-top:1px solid var(--line);background:var(--bg-2);margin-top:30px}
+.footer-in{max-width:var(--maxw);margin:0 auto;padding:30px 24px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-3);line-height:1.9}
+.footer-in b{color:var(--txt-2);font-weight:600}
+
+@media(max-width:860px){.hero{grid-template-columns:1fr;padding-top:38px}.bal{order:-1}}
+@media(max-width:560px){.hero h1{font-size:28px}.wrap{padding:22px 16px 50px}.sec-b{padding:16px}.hyp-b-in{padding-left:15px}}
+@media print{.ticker,.navbar,.to-top,.tgl,.bar-prog{display:none}.sec{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="bar-prog" id="barProg"></div>
+
+<!-- TICKER -->
+<div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="brand">
+      <div class="brand-mark">У</div>
+      <div><b>УСТИНОВ МЕБЕЛЬ</b><span>ЦА · МАРКЕТИНГ · v1</span></div>
+    </div>
+    <div class="hdr-sp"></div>
+    <span class="status"><span class="led"></span>АНАЛИЗ ГОТОВ</span>
+    <button class="tgl" id="tgl" role="switch" aria-checked="true" aria-label="Тема"><span class="tgl-k" id="tglK">🌙</span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <span class="hero-tag">◈ КРАСНОДАР · КУХНИ НА ЗАКАЗ · СОБСТВЕННОЕ ПРОИЗВОДСТВО</span>
+    <h1>ЦА и маркетинг «Устинов мебель»</h1>
+    <p>Интерактивный разбор целевой аудитории, сегментов, 5W, JTBD, пути клиента, языка клиента и маркетинговых гипотез — построенный на реальном продукте: семейное производство, кухни от 68 000 ₽, фурнитура Blum · Boyard · Gola, срок 30–40 дней, открытое производство.</p>
+    <div class="hero-cta">
+      <a class="btn" style="display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk';font-size:13px;font-weight:600;padding:10px 18px;border-radius:11px;border:1px solid transparent;text-decoration:none;background:var(--grad-lime);color:var(--lime-ink);box-shadow:var(--glow-lime)" href="#segments">▸ К сегментам</a>
+      <a class="btn" style="display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk';font-size:13px;font-weight:600;padding:10px 18px;border-radius:11px;border:1px solid var(--line-2);text-decoration:none;background:var(--panel);color:var(--txt)" href="#hypo">Гипотезы</a>
+    </div>
+  </div>
+  <div class="bal">
+    <div class="bal-top"><span class="bal-label">Средний чек кухни</span><span class="bal-chip">▲ от производителя</span></div>
+    <div class="bal-amt"><span class="cur">₽</span> 90 000<span class="cur"> – 250 000</span></div>
+    <div class="bal-sub">Диапазон продукта: 68 000 – 140 000 ₽ и выше</div>
+    <svg class="spark" id="spark" viewBox="0 0 320 54" preserveAspectRatio="none" fill="none"></svg>
+    <div class="bal-foot"><span>Замер + 3D бесплатно</span><span>Срок 30–40 дней</span></div>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="navbar"><div class="navbar-in" id="nav">
+  <a class="seg active" href="#base"><span class="ix">00</span> База</a>
+  <a class="seg" href="#audience"><span class="ix">01</span> Аудитория</a>
+  <a class="seg" href="#segments"><span class="ix">02</span> Сегменты</a>
+  <a class="seg" href="#fivew"><span class="ix">03</span> 5W</a>
+  <a class="seg" href="#jtbd"><span class="ix">04</span> JTBD</a>
+  <a class="seg" href="#cjm"><span class="ix">05</span> CJM</a>
+  <a class="seg" href="#lang"><span class="ix">06</span> Язык</a>
+  <a class="seg" href="#insights"><span class="ix">07</span> Выводы</a>
+  <a class="seg" href="#hypo"><span class="ix">08</span> Гипотезы</a>
+  <a class="seg" href="#final"><span class="ix">09</span> Итог</a>
+</div></nav>
+
+<main class="wrap">
+
+<!-- 00 BASE -->
+<section class="sec" id="base">
+  <div class="sec-h"><div class="sec-ix">🏭</div><div><div class="ix-n">00 · ОСНОВА</div><div class="ix-t">Позиционирование и допущения</div></div></div>
+  <div class="sec-b">
+    <p class="lead">Анализ построен <strong>на реальном продукте «Устинов мебель»</strong>, а не на абстрактной «кухне на заказ». Ниже — база, из которой выведены все сегменты и гипотезы.</p>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="lab">Производство</div><div class="val" style="font-size:15px;line-height:1.4">Семейное<br>Краснодар, Ипподромная 10г</div></div>
+      <div class="kpi"><div class="lab">Диапазон кухни</div><div class="val"><span class="cur">₽</span>68–140<span class="cur">к+</span></div><div class="dl">и выше</div></div>
+      <div class="kpi"><div class="lab">Срок</div><div class="val">30–40<span class="cur"> дн</span></div><div class="dl">рабочих дней</div></div>
+      <div class="kpi"><div class="lab">Фурнитура</div><div class="val" style="font-size:16px">Blum · Boyard · Gola</div></div>
+      <div class="kpi"><div class="lab">Материалы</div><div class="val" style="font-size:14px;line-height:1.4">ЛДСП Egger → эмаль,<br>кварцевый агломерат</div></div>
+      <div class="kpi"><div class="lab">В стоимости</div><div class="val" style="font-size:14px;line-height:1.4">Замер, 3D-проект,<br>доставка, установка</div></div>
+    </div>
+    <div class="eyebrow">Ключевой оффер</div>
+    <div class="callout"><div class="ci">🎯</div><div class="cc"><b>«Своё производство → цены ниже рыночных» + индивидуальный подход.</b> Открытое производство, работа по дизайн-проекту, рассрочка/кредит. Сделка проходит через личный контакт с производителем (Владимир).</div></div>
+    <div class="eyebrow">Допущения</div>
+    <ul class="clean">
+      <li>Средний и «средний+» ценовой сегмент.</li>
+      <li>Основной поток — новостройки Краснодара и частные дома в пригородах.</li>
+      <li>Где вывод зависит от сегмента — это помечено в тексте.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 01 AUDIENCE -->
+<section class="sec" id="audience">
+  <div class="sec-h"><div class="sec-ix">👥</div><div><div class="ix-n">01 · КТО</div><div class="ix-t">Целевая аудитория</div></div></div>
+  <div class="sec-b">
+    <div class="eyebrow">Кто эти люди · соц-дем + мышление</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="lab">Возраст ядра</div><div class="val">28–48<span class="cur"> лет</span></div><div class="dl">вторичное: 48–60</div></div>
+      <div class="kpi"><div class="lab">Инициатор выбора</div><div class="val" style="font-size:17px">Чаще женщина</div><div class="dl">эстетика · эргономика · референсы</div></div>
+      <div class="kpi"><div class="lab">Семейный бюджет</div><div class="val"><span class="cur">₽</span>100–120<span class="cur">к/мес</span></div><div class="dl">средний и выше для Краснодара</div></div>
+      <div class="kpi"><div class="lab">Бюджет на кухню</div><div class="val"><span class="cur">₽</span>90–250<span class="cur">к</span></div><div class="dl">крупная плановая трата</div></div>
+    </div>
+    <div class="callout vio"><div class="ci">🧠</div><div class="cc"><b>Мышление:</b> «хочу красиво как в референсах, но чтобы не переплатить и не обманули». <b>Рациональные максималисты</b> — ищут баланс цена / качество / эстетика. Финальное согласование бюджета — с партнёром.</div></div>
+
+    <div class="eyebrow">Ситуация «здесь и сейчас» · специфика Краснодара</div>
+    <div class="princ">
+      <div class="pcard"><div class="pi">🏗️</div><b>Взрывной рынок новостроек</b><p>Краснодар — один из лидеров РФ по вводу жилья. Поток людей с ключами в черновой отделке → кухня в топ-3 первых крупных заказов.</p></div>
+      <div class="pcard"><div class="pi">🚚</div><b>Приток переехавших</b><p>Сибирь, Север, Центр, ближнее зарубежье. Обустройство «с нуля», нет местных мастеров — выбор по интернету и отзывам.</p></div>
+      <div class="pcard"><div class="pi">🏡</div><b>Частный сектор и ИЖС</b><p>Немецкая деревня, Российский, станицы. Нестандартные планировки, кухни-острова, большие площади.</p></div>
+      <div class="pcard"><div class="pi">⚠️</div><b>«Рынок обжигания»</b><p>Много частников и салонов. Страх «кинут / затянут / сделают криво» — звучит прямо в отзывах: «обожглась на строительной бригаде».</p></div>
+    </div>
+
+    <div class="eyebrow">Почему тема актуальна именно сейчас</div>
+    <ul class="clean">
+      <li>Кухня — «сердце квартиры» и самый функционально нагруженный узел; без неё жить в новой квартире фактически нельзя.</li>
+      <li>Готовые кухни масс-маркета не встают в нестандартные проёмы новостроек → <strong>заказная кухня становится необходимостью, а не роскошью.</strong></li>
+      <li>Рост цен на мебель делает аргумент <span class="hl">«производитель без наценки салона»</span> особенно чувствительным.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 02 SEGMENTS -->
+<section class="sec" id="segments">
+  <div class="sec-h"><div class="sec-ix">🧩</div><div><div class="ix-n">02 · СЕГМЕНТАЦИЯ</div><div class="ix-t">7 сегментов аудитории</div></div></div>
+  <div class="sec-b">
+    <p class="lead">Каждый сегмент — с болями, страхами, желаниями и возражениями. <span class="hl">Легенда:</span> <span class="dot pain"></span> боль · <span class="dot fear"></span> страх · <span class="dot want"></span> желание · <span class="dot obj"></span> возражение.</p>
+    <div class="seg-grid" id="segGrid"></div>
+
+    <div class="eyebrow">🎯 Приоритетные сегменты</div>
+    <div class="callout"><div class="ci">🥇</div><div class="cc"><b>№1 «Новосёлы в новостройке» + №3 «Рациональный оптимизатор цены»</b> (они сильно пересекаются). Самый массовый и постоянно пополняющийся поток в Краснодаре.</div></div>
+    <ul class="clean">
+      <li><strong>Массовый поток:</strong> ввод новостроек → предсказуемый спрос каждый месяц.</li>
+      <li><strong>Точное попадание оффера:</strong> «своё производство → ниже рыночных цен» бьёт в их главный триггер — цена/качество.</li>
+      <li><strong>Короткий путь к покупке:</strong> готовая потребность + дедлайн (въезд), спрос не нужно «разогревать».</li>
+      <li><strong>Отзывы подтверждают канал:</strong> «самые низкие цены», «жаль, что не нашли раньше» — надо усиливать.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 03 5W -->
+<section class="sec" id="fivew">
+  <div class="sec-h"><div class="sec-ix">🧭</div><div><div class="ix-n">03 · МЕТОД ШЕРРИНГТОНА</div><div class="ix-t">Анализ 5W</div></div></div>
+  <div class="sec-b">
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th style="width:150px">W</th><th>Ответ для «Устинов мебель»</th></tr></thead>
+      <tbody>
+        <tr><td><span class="w">Who</span><br>кто решает</td><td>Женщина 28–48 (инициатор, визуал, эргономика) + партнёр (бюджет, финальное «да»). В ИЖС — совместный «семейный проект».</td></tr>
+        <tr><td><span class="w">What</span><br>что нужно</td><td>Кухня под точные размеры квартиры, красивая как в референсе, «под ключ» (замер→проект→изготовление→доставка→монтаж), без скрытых доплат, в срок.</td></tr>
+        <tr><td><span class="w">Why</span><br>почему хотят</td><td>Въезжают в новую квартиру / старая негодна; готовые не подходят по размерам; хотят красиво и надолго, но без переплаты салону.</td></tr>
+        <tr><td><span class="w">Where</span><br>где ищут</td><td>Instagram/соцсети (визуал работ), Яндекс-поиск «кухни на заказ Краснодар», Авито, 2ГИС/Яндекс.Карты (отзывы), сарафан, отзовики.</td></tr>
+        <tr><td><span class="w">When</span><br>когда готовы</td><td>После получения ключей и на чистовой отделке; при переезде; когда старая кухня «доломалась». Пики — после НГ и весной перед сезоном ремонтов.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="eyebrow">Реальные жизненные сценарии</div>
+    <div class="princ">
+      <div class="pcard"><div class="pi">🏢</div><b>Сценарий А · Новостройка</b><p>Пара получила ключи в ЖК, идёт ремонт. Жена собирает референсы в Instagram, находит ваши работы, пишет «рассчитайте стоимость». Вопрос — «уложимся ли в бюджет и в срок до новоселья».</p></div>
+      <div class="pcard"><div class="pi">🛡️</div><b>Сценарий Б · Обжёгшийся</b><p>Человек нарвался на бригаду, месяц читает отзывы, обзванивает 10 компаний. Выбирает того, кто дал договор, показал производство и не давил. (Отзыв от «Катерины».)</p></div>
+      <div class="pcard"><div class="pi">🏡</div><b>Сценарий В · ИЖС</b><p>Семья строит дом в пригороде, нужна кухня-остров 4+ метра с высокими пеналами. Ищет, кто возьмётся за нестандарт и премиальную фурнитуру.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 JTBD -->
+<section class="sec" id="jtbd">
+  <div class="sec-h"><div class="sec-ix">⚙️</div><div><div class="ix-n">04 · JOBS TO BE DONE</div><div class="ix-t">Какую «работу» нанимают продукт</div></div></div>
+  <div class="sec-b">
+    <div class="seg-grid">
+      <div class="scard"><div class="scard-h"><div class="scard-ic">🔧</div><div><div class="no">JOB · 01</div><div class="nm">Функциональные</div></div></div><div class="scard-b"><ul class="clean"><li>Кухня, точно вставшая в конкретные размеры помещения.</li><li>Удобное хранение и эргономика (рабочий треугольник, доводчики, ящики).</li><li>Закрыть «под ключ» одним подрядчиком: замер → проект → монтаж.</li><li>Уложиться в бюджет и в срок до заселения.</li></ul></div></div>
+      <div class="scard"><div class="scard-h"><div class="scard-ic">💚</div><div><div class="no">JOB · 02</div><div class="nm">Эмоциональные</div></div></div><div class="scard-b"><ul class="clean"><li><strong>Гордость:</strong> «пространство, в которое хочется возвращаться».</li><li><strong>Спокойствие и контроль:</strong> «меня не обманут, я вижу процесс, есть договор».</li><li><strong>Облегчение:</strong> «я сняла с себя головную боль, за меня всё продумали».</li></ul></div></div>
+      <div class="scard"><div class="scard-h"><div class="scard-ic">👑</div><div><div class="no">JOB · 03</div><div class="nm">Социальные</div></div></div><div class="scard-b"><ul class="clean"><li>Показать гостям красивую, «дорого выглядящую» кухню.</li><li>Транслировать статус «сделали качественно и со вкусом».</li><li>Быть тем, кто «нашёл хороших мастеров» (повод для сарафана).</li></ul></div></div>
+    </div>
+    <div class="eyebrow">Итоговая формулировка работы</div>
+    <div class="callout"><div class="ci">🎯</div><div class="cc">«Преврати мою пустую/устаревшую кухню в красивое, идеально подогнанное и удобное пространство — <b>без переплаты салону, без риска обмана и без срыва сроков</b>, чтобы я гордился(лась) результатом и рекомендовал(а) вас другим».</div></div>
+  </div>
+</section>
+
+<!-- 05 CJM -->
+<section class="sec" id="cjm">
+  <div class="sec-h"><div class="sec-ix">🗺️</div><div><div class="ix-n">05 · CUSTOMER JOURNEY</div><div class="ix-t">Путь клиента · 5 этапов</div></div></div>
+  <div class="sec-b">
+    <div class="cjm" id="cjm"></div>
+  </div>
+</section>
+
+<!-- 06 LANGUAGE -->
+<section class="sec" id="lang">
+  <div class="sec-h"><div class="sec-ix">💬</div><div><div class="ix-n">06 · VOICE OF CUSTOMER</div><div class="ix-t">Язык клиента</div></div></div>
+  <div class="sec-b">
+    <div class="eyebrow">Как клиент описывает проблему · реальные формулировки</div>
+    <div class="quotes">
+      <span class="quote">Долго искала исполнителя</span>
+      <span class="quote">Обожглась на строительной бригаде</span>
+      <span class="quote">Обзвонила и написала многим</span>
+      <span class="quote">Нужна кухня в новую квартиру</span>
+      <span class="quote">Стандартные не подходят по размеру</span>
+      <span class="quote">Хочу как на этой картинке</span>
+      <span class="quote">Боюсь, что обманут / затянут / всплывут доплаты</span>
+      <span class="quote">Жаль, что не нашла вас раньше</span>
+    </div>
+    <div class="eyebrow">Слова клиента · использовать в текстах</div>
+    <div class="tag-row">
+      <span class="tag"><span class="i">#</span>под ключ</span>
+      <span class="tag"><span class="i">#</span>по своим размерам</span>
+      <span class="tag"><span class="i">#</span>свои цены / без наценки</span>
+      <span class="tag"><span class="i">#</span>в срок</span>
+      <span class="tag"><span class="i">#</span>качественно и недорого</span>
+      <span class="tag"><span class="i">#</span>показали производство</span>
+      <span class="tag"><span class="i">#</span>сделали как договаривались</span>
+    </div>
+    <div class="eyebrow">Фразы, готовые для рекламы и лендингов</div>
+    <div class="phrase">Кухня по вашим размерам — без наценки салона.</div>
+    <div class="phrase">Своё производство в Краснодаре: цена от производителя, качество как в премиум-салоне.</div>
+    <div class="phrase">Уложимся в срок — фиксируем в договоре.</div>
+    <div class="phrase">Покажем производство до оплаты. Работаем открыто с 2020 года.</div>
+    <div class="phrase">Бесплатный дизайн-проект в 3D — увидите свою кухню до заказа.</div>
+    <div class="phrase">Blum, эмаль, кварц — премиальные материалы по честной цене.</div>
+    <div class="phrase">Не будет доплат: цена в договоре — окончательная.</div>
+  </div>
+</section>
+
+<!-- 07 INSIGHTS -->
+<section class="sec" id="insights">
+  <div class="sec-h"><div class="sec-ix">📊</div><div><div class="ix-n">07 · ВЫВОДЫ ДЛЯ МАРКЕТИНГА</div><div class="ix-t">Боли · триггеры · страхи · смыслы</div></div></div>
+  <div class="sec-b">
+    <div class="seg-grid">
+      <div class="scard"><div class="scard-h"><div class="scard-ic">🩹</div><div><div class="no">TOP-5</div><div class="nm">Ключевые боли</div></div></div><div class="scard-b"><ul class="clean"><li>Страх переплатить салону за то же качество.</li><li>Страх обмана / срыва сроков / скрытых доплат.</li><li>Нестандартные размеры — готовые не подходят.</li><li>Нет времени разбираться → нужен «под ключ».</li><li>Хочется красиво «как в референсе» и надолго.</li></ul></div></div>
+      <div class="scard prio"><div class="scard-h"><div class="scard-ic">⚡</div><div><div class="no">DECISION</div><div class="nm">Триггеры решения</div></div><span class="prio-badge">ключевое</span></div><div class="scard-b"><ul class="clean"><li>Прозрачная фиксированная цена «без доплат».</li><li>Бесплатный 3D-проект (результат до оплаты).</li><li>Реальные отзывы + визит на открытое производство.</li><li>Фиксация срока в договоре + всё «под ключ».</li><li>Премиальная фурнитура/материалы как доказательство.</li></ul></div></div>
+      <div class="scard"><div class="scard-h"><div class="scard-ic">😨</div><div><div class="no">RISK</div><div class="nm">Ключевые страхи</div></div></div><div class="scard-b"><ul class="clean"><li>«Дешевле = хуже» / скрытые доплаты.</li><li>Предоплата и исчезновение / брак.</li><li>Затянут сроки — жить негде готовить.</li><li>«Получится не как на картинке».</li></ul></div></div>
+    </div>
+    <div class="eyebrow">Смыслы в коммуникации</div>
+    <div class="princ">
+      <div class="pcard"><div class="pi">🔍</div><b>Честность и открытость</b><p>Открытое производство, цена в договоре, живые отзывы.</p></div>
+      <div class="pcard"><div class="pi">🏭</div><b>Производитель без наценки</b><p>Премиум-качество по справедливой цене.</p></div>
+      <div class="pcard"><div class="pi">🧘</div><b>Спокойствие и контроль</b><p>«Под ключ», фиксированный срок, гарантия.</p></div>
+      <div class="pcard"><div class="pi">✨</div><b>Красота и индивидуальность</b><p>Дизайн-проект под ваш референс и размеры.</p></div>
+      <div class="pcard"><div class="pi">👨‍👩‍👧</div><b>Семейное дело</b><p>«Относимся к вашей кухне как к своей».</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 HYPOTHESES -->
+<section class="sec" id="hypo">
+  <div class="sec-h"><div class="sec-ix">🧪</div><div><div class="ix-n">08 · ГИПОТЕЗЫ</div><div class="ix-t">17 маркетинговых гипотез</div></div></div>
+  <div class="sec-b">
+    <p class="lead">Кликните по гипотезе, чтобы раскрыть, куда она бьёт.</p>
+    <div id="hypoWrap"></div>
+  </div>
+</section>
+
+<!-- 09 FINAL -->
+<section class="sec" id="final">
+  <div class="sec-h"><div class="sec-ix">🏁</div><div><div class="ix-n">09 · ИТОГ</div><div class="ix-t">Что даст максимальный эффект</div></div></div>
+  <div class="sec-b">
+    <div class="callout"><div class="ci">💪</div><div class="cc">Сильнейшая позиция — связка <b>«собственное производство → честная цена + открытость + премиальная фурнитура»</b>. Она идеально ложится на приоритетные сегменты (новосёлы + оптимизаторы цены), которых в Краснодаре стабильно много благодаря новостройкам.</div></div>
+    <div class="eyebrow">Три вещи прямо сейчас</div>
+    <div class="final-grid">
+      <div class="fcard"><div class="fn">01</div><div class="ft">Транслировать доверие везде</div><div class="fp">«Цена в договоре без доплат» + «открытое производство». Закрывает главный страх рынка (обман) и почти не используется конкурентами.</div></div>
+      <div class="fcard"><div class="fn">02</div><div class="ft">Жёстко контролировать сроки</div><div class="fp">Задержка доставки — единственная повторяющаяся жалоба в отзывах, и она бьёт по вашему же главному обещанию.</div></div>
+      <div class="fcard"><div class="fn">03</div><div class="ft">Квиз-калькулятор + таргет</div><div class="fp">Кампания по новостройкам с бесплатным 3D-проектом как крючком — короткий путь к массовому тёплому лиду.</div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer"><div class="footer-in">
+  <b>УСТИНОВ МЕБЕЛЬ</b> · кухни на заказ · Краснодар, ул. Ипподромная 10г<br>
+  Интерактивный отчёт: ЦА и маркетинг · разделы 00–09 · дизайн-код FINTECH OS<br>
+  Собственное производство · Blum · Boyard · Gola · срок 30–40 дней · открытое производство
+</div></footer>
+
+<button class="to-top" id="toTop" aria-label="Наверх">↑</button>
+
+<script>
+/* THEME */
+const root=document.documentElement,tgl=document.getElementById('tgl'),tglK=document.getElementById('tglK');
+tgl.addEventListener('click',()=>{const l=root.getAttribute('data-theme')==='light';root.setAttribute('data-theme',l?'dark':'light');tglK.textContent=l?'🌙':'☀️';tgl.setAttribute('aria-checked',String(l));});
+
+/* TICKER */
+const ticks=[['Производство','семейное · Краснодар','lm'],['Кухня','от 68 000 ₽','up'],['Срок','30–40 дней','lm'],['Фурнитура','Blum · Boyard · Gola','up'],['Замер + 3D','бесплатно','lm'],['Материалы','ЛДСП Egger → эмаль → кварц','up'],['Оффер','цена от производителя','lm'],['Приоритет','новосёлы + оптимизаторы','up'],['Доставка+монтаж','в стоимости','lm'],['Оплата','рассрочка / кредит','up']];
+const tt=document.getElementById('tickerTrack');
+function buildTicks(){let h='';for(let r=0;r<2;r++){ticks.forEach(t=>{h+=`<span class="tick"><b>${t[0]}</b> <span class="${t[2]}">${t[1]}</span></span><span class="tick-dot"></span>`;});}tt.innerHTML=h;}
+buildTicks();
+
+/* SPARK */
+(function(){const pts=[6,10,9,14,18,16,22,26,24,30,34,40,38,44,50];const w=320,h=54,max=Math.max(...pts),min=Math.min(...pts);const step=w/(pts.length-1);let d='';pts.forEach((p,i)=>{const x=i*step,y=h-((p-min)/(max-min))*(h-8)-4;d+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';});const svg=document.getElementById('spark');svg.innerHTML=`<defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--lime)" stop-opacity=".35"/><stop offset="1" stop-color="var(--lime)" stop-opacity="0"/></linearGradient></defs><path d="${d}L320 54 L0 54 Z" fill="url(#sg)"/><path d="${d}" stroke="var(--lime)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;})();
+
+/* SEGMENTS DATA */
+const segs=[
+{no:'01',ic:'🏢',nm:'Новосёлы в новостройке',prio:true,pain:'Пустая квартира, нужна кухня «под ключ» под нестандартные размеры; ограниченный бюджет после ипотеки и ремонта.',fear:'Не впишутся в бюджет, затянут сроки (жить негде готовить), скрытые доплаты.',want:'Красиво «как в Pinterest», уложиться в бюджет, всё «под ключ» без нервов.',obj:'«Почему у вас дешевле — не обманете по качеству?», «уложитесь ли в срок?»'},
+{no:'02',ic:'🏡',nm:'Владельцы частных домов / ИЖС',pain:'Большие и нестандартные кухни (острова, П-образные, высокие потолки), стандарт не подходит.',fear:'Сложный проект «не потянут», геометрия не сойдётся.',want:'Статусная, функциональная кухня-центр дома; вау-эффект для гостей.',obj:'«Справитесь ли с нестандартом?», «есть ли премиальные материалы?»'},
+{no:'03',ic:'💰',nm:'Рациональный оптимизатор цены',prio:true,pain:'Салоны дорого, частники рискованно; ищет максимум качества за деньги.',fear:'Переплата за бренд/салон, дешёвая фурнитура под видом хорошей.',want:'Прозрачная цена, честные материалы, «производитель без наценки».',obj:'«Докажите, что дешевле не значит хуже», «что по гарантии?»'},
+{no:'04',ic:'🎨',nm:'Эстет / визуал',pain:'Хочет конкретную эстетику (эмаль, фрезеровка «речкой», Gola, тонированное стекло) — не везде сделают.',fear:'«Получится не как на картинке», кустарный вид.',want:'Дизайн-проект, точное попадание в референс, актуальность на годы.',obj:'«Сделаете именно этот оттенок/фрезеровку?», «есть 3D до оплаты?»'},
+{no:'05',ic:'🛋️',nm:'Комплексный заказчик',pain:'Нужен один подрядчик на кухню + шкафы + гардероб + детскую (видно в отзывах).',fear:'Разнобой стилей, несколько подрядчиков = хаос и сроки.',want:'Единый стиль, один договор, скидка за объём.',obj:'«Потянете весь объём в срок?», «будет ли скидка за комплекс?»'},
+{no:'06',ic:'🛡️',nm:'Осторожный после негатива',pain:'Уже «обжёгся» на бригаде/частнике, теперь недоверчив.',fear:'Предоплата и исчезновение, брак, игнор после оплаты.',want:'Гарантии, договор, отзывы, возможность увидеть производство.',obj:'«Почему вам можно доверять?», «что если брак?»'},
+{no:'07',ic:'🔄',nm:'Замена старой кухни',pain:'Старая кухня развалилась/устарела, но полный ремонт не делают.',fear:'Грязь и долгий демонтаж, несовпадение с интерьером.',want:'Аккуратная замена, быстро, вписать в имеющийся ремонт.',obj:'«Демонтируете старую?», «уложитесь без ремонта всей кухни?»'}
+];
+const sg=document.getElementById('segGrid');
+sg.innerHTML=segs.map(s=>`<div class="scard${s.prio?' prio':''}"><div class="scard-h"><div class="scard-ic">${s.ic}</div><div><div class="no">СЕГМЕНТ · ${s.no}</div><div class="nm">${s.nm}</div></div>${s.prio?'<span class="prio-badge">приоритет</span>':''}</div><div class="scard-b">
+<div class="attr"><div class="k"><span class="dot pain"></span>Боли</div><div class="v">${s.pain}</div></div>
+<div class="attr"><div class="k"><span class="dot fear"></span>Страхи</div><div class="v">${s.fear}</div></div>
+<div class="attr"><div class="k"><span class="dot want"></span>Желания</div><div class="v">${s.want}</div></div>
+<div class="attr"><div class="k"><span class="dot obj"></span>Возражения</div><div class="v">${s.obj}</div></div>
+</div></div>`).join('');
+
+/* CJM DATA */
+const cjm=[
+{n:'1',t:'Осознание проблемы',ph:'AWARENESS',th:'«Кухни нет / старая ужасна. Надо решать. С чего начать?»',em:'Тревога, растерянность, лёгкое предвкушение.',pn:'Непонятен бюджет, боязнь связываться из-за историй обмана.',tp:'Соцсети (лента с интерьерами), поиск, разговоры со знакомыми.',mk:'Попадаться на глаза красивыми работами + снимать страх («расскажем цену честно, покажем производство»).'},
+{n:'2',t:'Поиск решения',ph:'CONSIDERATION',th:'«Кто в Краснодаре делает нормально и не дорого? Соберу варианты.»',em:'Любопытство + скепсис.',pn:'Слишком много компаний, все обещают одно и то же.',tp:'Instagram, сайт, 2ГИС/Яндекс.Карты, Авито, отзовики.',mk:'Отстройка — «своё производство, открытые цены, 6+ лет, живые отзывы, бесплатный дизайн-проект». Много фото работ с материалами и ценами «от».'},
+{n:'3',t:'Выбор / сравнение',ph:'EVALUATION',th:'«Сравню 2–3 финалистов по цене, срокам, материалам и отзывам.»',em:'Напряжение (боязнь ошибиться), надежда.',pn:'«Почему у них дешевле?», «не всплывут ли доплаты?», «уложатся ли в срок?»',tp:'Переписка/звонок, расчёт, 3D-проект, отзывы, визит на производство.',mk:'Быстрый ответ, бесплатный 3D, прозрачная смета «без доплат», приглашение на производство, кейсы «уложились в срок».'},
+{n:'4',t:'Принятие решения / покупка',ph:'PURCHASE',th:'«Вроде им можно доверять. Договор, предоплата — решаюсь.»',em:'Волнение + облегчение от выбора.',pn:'Безопасность предоплаты, фиксация сроков и цены в договоре.',tp:'Договор, замер технолога, оплата, рассрочка/кредит.',mk:'Снять риск — договор с фиксированными сроком и ценой, гарантия, рассрочка, понятные этапы.'},
+{n:'5',t:'После покупки',ph:'RETENTION',th:'«Сделают ли в срок и как обещали? А если что-то не так?»',em:'Нетерпение → радость при монтаже.',pn:'Задержка доставки (единственная повторяющаяся претензия — контролировать!), качество монтажа, гарантия.',tp:'Статусы по проекту, доставка, монтаж, гарантийное обслуживание.',mk:'Держать в курсе сроков, идеально отработать монтаж, попросить отзыв и фото, допродать шкаф/гардероб/детскую.'}
+];
+document.getElementById('cjm').innerHTML=cjm.map(c=>`<div class="cstep"><div class="crail"><div class="cnode">${c.n}</div><div class="cline"></div></div><div class="cbody"><div class="ct">${c.t}</div><div class="cph">Этап ${c.n} · ${c.ph}</div><div class="cgrid">
+<div class="cq"><div class="cl">💭 Мысли</div><div class="cv">${c.th}</div></div>
+<div class="cq"><div class="cl">🎭 Эмоции</div><div class="cv">${c.em}</div></div>
+<div class="cq"><div class="cl">⚠️ Боли / сомнения</div><div class="cv">${c.pn}</div></div>
+<div class="cq"><div class="cl">📍 Точки контакта</div><div class="cv">${c.tp}</div></div>
+<div class="cq mk"><div class="cl">🎯 Задача маркетинга</div><div class="cv">${c.mk}</div></div>
+</div></div></div>`).join('');
+
+/* HYPOTHESES DATA */
+const hgroups=[
+{g:'Гипотезы для УТП',items:[
+{id:'H1',t:'«Кухня от производителя без наценки салона — с фурнитурой Blum и ценой в договоре без доплат».',tag:'бьёт в цену + доверие'},
+{id:'H2',t:'«Открытое производство: покажем, как делаем вашу кухню, ещё до оплаты».',tag:'отстройка через прозрачность'},
+{id:'H3',t:'«Кухня по вашим размерам за 30–40 дней — срок фиксируем в договоре».',tag:'снимает страх сроков'}
+]},
+{g:'Гипотезы для рекламы',items:[
+{id:'H4',t:'Таргет на ЖК-новостройки Краснодара (гео + интересы «ремонт/новоселье») с оффером «кухня под ключ до новоселья».',tag:'приоритетный сегмент №1'},
+{id:'H5',t:'Формат «до/после» и «процесс на производстве» в Reels/VK — показывает честность и качество.',tag:'контент уже есть'},
+{id:'H6',t:'Ретаргет «обжёгшихся» через отзывы-истории («долго искала после неудачи — и вот результат»).',tag:'сегмент №6'},
+{id:'H7',t:'Отдельная кампания на ИЖС/частные дома с акцентом на нестандарт и острова.',tag:'сегмент №2'}
+]},
+{g:'Гипотезы для посадочной страницы',items:[
+{id:'H8',t:'Первый экран = оффер «производитель без наценки» + кнопка «Бесплатный 3D-проект и расчёт».',tag:'конверсия'},
+{id:'H9',t:'Блок «Почему нам доверяют»: договор с фиксированной ценой/сроком, открытое производство, 6+ лет, отзывы с фото.',tag:'доверие'},
+{id:'H10',t:'Каждая работа с материалами, фурнитурой и ценой «от» + фильтр по бюджету (от 68к / 100к / 140к).',tag:'усилить существующее'},
+{id:'H11',t:'Калькулятор-квиз «Рассчитайте кухню за 1 минуту» → лид-магнит + захват контакта.',tag:'лидген'},
+{id:'H12',t:'Отработка возражения «почему дешевле» прямым блоком-объяснением (нет аренды салона, прямое производство).',tag:'снятие возражения'}
+]},
+{g:'Гипотезы для контента и продаж',items:[
+{id:'H13',t:'Контент-рубрики: «Разбор материалов» (ЛДСП vs МДФ vs эмаль), «Из чего складывается цена», «Как не нарваться на недобросовестного мастера».',tag:'экспертность'},
+{id:'H14',t:'Кейсы по сегментам: «кухня в новостройке до 120к», «кухня-остров для дома», «вся мебель в квартиру».',tag:'социальное доказательство'},
+{id:'H15',t:'Допродажа комплекса: после кухни предлагать шкаф/гардероб/детскую со скидкой за объём.',tag:'сегмент №5 · LTV'},
+{id:'H16',t:'Реферальная механика: бонус за отзыв с фото и за приведённого клиента.',tag:'усиливает сарафан'},
+{id:'H17',t:'В скриптах продаж — быстрый ответ + сразу бесплатный 3D-проект как «крючок», а не сразу цена.',tag:'скрипт'}
+]}
+];
+const hw=document.getElementById('hypoWrap');
+let hh='';
+hgroups.forEach(gr=>{hh+=`<div class="hgroup">${gr.g}</div>`;gr.items.forEach(it=>{hh+=`<div class="hyp"><div class="hyp-h"><span class="hyp-id">${it.id}</span><span class="hyp-t">${it.t}</span><span class="hyp-ar">▸</span></div><div class="hyp-b"><div class="hyp-b-in"><span class="hyp-tag">→ ${it.tag}</span></div></div></div>`;});});
+hw.innerHTML=hh;
+hw.querySelectorAll('.hyp-h').forEach(h=>{h.addEventListener('click',()=>{const p=h.parentElement,b=p.querySelector('.hyp-b');const open=p.classList.contains('open');if(open){b.style.maxHeight=null;p.classList.remove('open');}else{p.classList.add('open');b.style.maxHeight=b.scrollHeight+'px';}});});
+
+/* REVEAL */
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');}});},{threshold:.08});
+document.querySelectorAll('.sec').forEach(s=>obs.observe(s));
+
+/* PROGRESS + TO TOP */
+const bar=document.getElementById('barProg'),toTop=document.getElementById('toTop');
+window.addEventListener('scroll',()=>{const st=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-document.documentElement.clientHeight;bar.style.width=(st/h*100)+'%';toTop.classList.toggle('show',st>500);});
+toTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* NAV SCROLLSPY */
+const segLinks=[...document.querySelectorAll('.navbar-in .seg')];
+const secs=segLinks.map(l=>document.querySelector(l.getAttribute('href')));
+const so=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const id='#'+e.target.id;segLinks.forEach(l=>l.classList.toggle('active',l.getAttribute('href')===id));}});},{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(s=>s&&so.observe(s));
+</script>
+</body>
+</html>
